@@ -1,0 +1,44 @@
+// src/services/aiService.ts
+import { GoogleGenerativeAI, GenerativeModel } from "@google/generative-ai";
+
+// Load API key from .env
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+if (!API_KEY) {
+  console.error("❌ Gemini API key is missing. Please add it in your .env file as VITE_GEMINI_API_KEY");
+  throw new Error("Missing Gemini API key");
+}
+
+// Initialize Gemini model
+const genAI = new GoogleGenerativeAI(API_KEY);
+const model: GenerativeModel = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+// System prompt instructing AI
+const systemPrompt = `
+You are an expert plant pathologist.
+Analyze the uploaded image of a plant leaf and identify if the plant has any disease.
+Respond briefly and factually using this format:
+
+Disease: [disease name or "Healthy"]
+Reason: [short reason]
+Treatment: [short suggestion or 'None required']
+`;
+
+export async function getAiChatResponse(imageBase64: string): Promise<string> {
+  try {
+    const result = await model.generateContent([
+      { text: systemPrompt },
+      {
+        inlineData: {
+          mimeType: "image/jpeg",
+          data: imageBase64.split(",")[1], // remove data:image/jpeg;base64,
+        },
+      },
+    ]);
+
+    return result.response?.text() || "No response from AI.";
+  } catch (error) {
+    console.error("AI detection error:", error);
+    return "Sorry, I could not analyze the plant image right now.";
+  }
+}

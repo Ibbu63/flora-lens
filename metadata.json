@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Copy of Copy of Flora Lenz",
+  "description": "A beautiful and intelligent plant care assistant. Manage your plants, get care reminders, identify new plants with your camera, and chat with an AI expert for advice.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
