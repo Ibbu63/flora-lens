@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Send, Loader, MessageSquare } from "lucide-react";
 import type { ChatMessage } from "../types";
-import { getAiChatResponse } from "../services/geminiService";
+import { getAiChatResponse } from "../services/aiService";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // ✅ Load API key safely from .env
