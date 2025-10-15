@@ -202,76 +202,89 @@ const Garden: React.FC<{
     }
 
     return (
-        <div className="pb-28 pt-20">
-            {/* Header */}
-            <div className="bg-gradient-to-br from-green-400 via-emerald-400 to-teal-400 p-8 rounded-b-3xl shadow-xl mx-4 mb-6">
-                <h1 className="text-3xl font-black text-white mb-3">Good Morning, Ibrahim</h1>
-                {weather && (
-                    <div className="flex items-center gap-6 text-white">
-                        <div className="flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full"><Sun size={18} /><span className="font-semibold">{weather.temp}°C</span></div>
-                        <div className="flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full"><Droplet size={18} /><span className="font-semibold">{weather.humidity}%</span></div>
-                    </div>
-                )}
-            </div>
-
-            {/* Stats */}
-            <div className="px-4">
-                <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-xl mb-6 border-2 border-green-100 dark:border-gray-700">
-                    <div className="flex justify-around text-center">
-                        <div>
-                            <div className="text-4xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-1">{plants.length}</div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">Plants</div>
-                        </div>
-                        <div className="w-px bg-gray-200 dark:bg-gray-700"></div>
-                        <div>
-                            <div className="text-4xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-1">{plants.filter(p => p.waterDays <= 2).length}</div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">Need Water</div>
-                        </div>
-                        <div className="w-px bg-gray-200 dark:bg-gray-700"></div>
-                        <div>
-                            <div className="text-4xl font-black bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-1">{plants.filter(p => p.light === 'low').length}</div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">Low Light</div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Filters & View Mode */}
-                <div className="flex items-center justify-between mb-4">
-                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                        {['All', 'Low Light', 'Indoor', 'Trailing', 'Low Maintenance'].map(tag => (
-                            <button key={tag} onClick={() => setFilterTag(tag)} className={`px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all transform ${filterTag === tag ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg scale-105' : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'}`}>{tag}</button>
-                        ))}
-                    </div>
-                    <div className="flex gap-2 ml-2">
-                        <button onClick={() => setViewMode('grid')} className={`p-3 rounded-xl transition ${viewMode === 'grid' ? 'bg-green-500 text-white shadow-lg' : 'bg-white text-gray-600 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'}`}><Grid size={18} /></button>
-                        <button onClick={() => setViewMode('list')} className={`p-3 rounded-xl transition ${viewMode === 'list' ? 'bg-green-500 text-white shadow-lg' : 'bg-white text-gray-600 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'}`}><List size={18} /></button>
-                    </div>
-                </div>
-
-                {/* Plants Grid/List */}
-                {filteredPlants.length > 0 ? (
-                    <div className={viewMode === 'grid' ? 'grid grid-cols-2 gap-4' : 'space-y-4'}>
-                        {filteredPlants.map(plant => (
-                            <PlantCard key={plant.id} plant={plant} onClick={() => setSelectedPlant(plant)} />
-                        ))}
-                    </div>
-                ) : (
-                     <div className="text-center py-16 px-6 bg-white dark:bg-gray-800 rounded-3xl shadow-lg border-2 border-dashed border-green-200 dark:border-gray-700">
-                        <img src="https://ouch-cdn2.icons8.com/s-f2-j7-Xw030iB2L2x0V-lqI_bE_A-sA1gLaa_g/rs:fit:368:368/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9wbmcvOTI4/LzM1OGMxZjJjLTFl/Y2ItNDZiZi05NmE2/LTQ3M2ZlNDE5YmY5/My5wbmc.png" alt="A friendly potted plant" className="w-40 h-40 mx-auto mb-4" />
-                        <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2">Your Garden Awaits</h3>
-                        <p className="text-gray-500 dark:text-gray-400 mb-6">It looks a little empty here. Let's add your first plant to get started!</p>
-                        <button className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full font-bold flex items-center justify-center gap-2 mx-auto hover:shadow-xl transition-all transform hover:scale-105">
-                            <Plus size={20} /> Add Plant
-                        </button>
-                    </div>
-                )}
-            </div>
-
-            {/* Floating Add Button */}
-            <button className="fixed bottom-32 right-6 w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center shadow-2xl hover:shadow-green-400/50 transition-all transform hover:scale-110 z-50">
-                <Plus className="text-white" size={32} />
-            </button>
+        <div className="pb-28 pt-16 sm:pt-20">
+  {/* Header */}
+  <div className="bg-gradient-to-br from-green-400 via-emerald-400 to-teal-400 p-4 sm:p-8 rounded-b-3xl shadow-xl mx-4 mb-4 sm:mb-6">
+    <h1 className="text-2xl sm:text-3xl font-black text-white mb-2 sm:mb-3">Good Morning, Ibrahim</h1>
+    {weather && (
+      <div className="flex flex-wrap gap-2 sm:gap-6 text-white">
+        <div className="flex items-center gap-2 bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm sm:text-base">
+          <Sun size={16} className="sm:!w-18 sm:!h-18" /> <span className="font-semibold">{weather.temp}°C</span>
         </div>
+        <div className="flex items-center gap-2 bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm sm:text-base">
+          <Droplet size={16} /> <span className="font-semibold">{weather.humidity}%</span>
+        </div>
+      </div>
+    )}
+  </div>
+
+  {/* Stats Section */}
+  <div className="px-4">
+    <div className="bg-white dark:bg-gray-800 rounded-3xl p-4 sm:p-6 shadow-xl mb-4 sm:mb-6 border-2 border-green-100 dark:border-gray-700">
+      <div className="flex justify-around text-center flex-wrap gap-4">
+        <div>
+          <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-1">{plants.length}</div>
+          <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">Plants</div>
+        </div>
+        <div>
+          <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-1">{plants.filter(p => p.waterDays <= 2).length}</div>
+          <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">Need Water</div>
+        </div>
+        <div>
+          <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-1">{plants.filter(p => p.light === 'low').length}</div>
+          <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">Low Light</div>
+        </div>
+      </div>
+    </div>
+
+    {/* Filters & View Mode */}
+    <div className="flex items-center justify-between mb-4">
+      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        {['All', 'Low Light', 'Indoor', 'Trailing', 'Low Maintenance'].map(tag => (
+          <button
+            key={tag}
+            onClick={() => setFilterTag(tag)}
+            className={`px-5 py-2 rounded-full text-sm sm:text-base font-semibold whitespace-nowrap transition-all transform ${
+              filterTag === tag
+                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg scale-105'
+                : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+            }`}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+      <div className="flex gap-2 ml-2">
+        <button onClick={() => setViewMode('grid')} className={`p-3 rounded-xl transition ${viewMode === 'grid' ? 'bg-green-500 text-white shadow-lg' : 'bg-white text-gray-600 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'}`}><Grid size={18} /></button>
+        <button onClick={() => setViewMode('list')} className={`p-3 rounded-xl transition ${viewMode === 'list' ? 'bg-green-500 text-white shadow-lg' : 'bg-white text-gray-600 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'}`}><List size={18} /></button>
+      </div>
+    </div>
+
+    {/* Plants Grid/List */}
+    {filteredPlants.length > 0 ? (
+      <div className={viewMode === 'grid' ? 'grid grid-cols-2 gap-4' : 'space-y-4'}>
+        {filteredPlants.map(plant => (
+          <PlantCard key={plant.id} plant={plant} onClick={() => setSelectedPlant(plant)} />
+        ))}
+      </div>
+    ) : (
+      <div className="text-center py-16 px-6 bg-white dark:bg-gray-800 rounded-3xl shadow-lg border-2 border-dashed border-green-200 dark:border-gray-700">
+        <img src="https://ouch-cdn2.icons8.com/s-f2-j7-Xw030iB2L2x0V-lqI_bE_A-sA1gLaa_g/rs:fit:368:368/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9wbmcvOTI4/LzM1OGMxZjJjLTFl/Y2ItNDZiZi05NmE2/LTQ3M2ZlNDE5YmY5/My5wbmc.png" alt="A friendly potted plant" className="w-32 sm:w-40 h-32 sm:h-40 mx-auto mb-4" />
+        <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mb-2">Your Garden Awaits</h3>
+        <p className="text-gray-500 dark:text-gray-400 mb-6">It looks a little empty here. Let's add your first plant to get started!</p>
+        <button className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full font-bold flex items-center justify-center gap-2 mx-auto hover:shadow-xl transition-all transform hover:scale-105">
+          <Plus size={20} /> Add Plant
+        </button>
+      </div>
+    )}
+  </div>
+
+  {/* Floating Add Button */}
+  <button className="fixed bottom-20 sm:bottom-32 right-4 sm:right-6 w-14 sm:w-16 h-14 sm:h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center shadow-2xl hover:shadow-green-400/50 transition-all transform hover:scale-110 z-50">
+    <Plus className="text-white" size={28} sm:size={32} />
+  </button>
+</div>
+
     );
 };
 

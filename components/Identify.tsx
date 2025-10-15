@@ -16,6 +16,8 @@ const Identify: React.FC = () => {
     "Analyzing image...",
     "Diagnosing plant condition...",
     "Checking for diseases...",
+    "Identifying the spots...",
+    "Evaluating the result...",
     "Almost done..."
   ];
   let animationInterval: NodeJS.Timeout;
@@ -177,19 +179,15 @@ const Identify: React.FC = () => {
       </div>
 
       {/* AI Detection Result */}
-      <div className="mt-4 p-4 rounded-2xl bg-white dark:bg-gray-800 shadow-lg text-gray-800 dark:text-white min-h-[120px] flex flex-col">
-        {/* AI Diagnosis Title with pulse when scanning */}
-        <h2
-          className={`font-bold text-lg text-green-600 dark:text-green-400 mb-2 ${
-            isScanning ? "animate-pulse" : ""
-          }`}
-        >
-          AI Diagnosis:
-        </h2>
+<div className="mt-4 p-4 rounded-2xl bg-white dark:bg-gray-800 shadow-lg text-gray-800 dark:text-white min-h-[120px] flex flex-col">
+  {/* AI Diagnosis Title (static, no pulse) */}
+  <h2 className="font-bold text-lg text-green-600 dark:text-green-400 mb-2">
+    AI Diagnosis:
+  </h2>
 
         {/* Scanning / Result Message */}
         <div
-          className={`flex-1 transition-opacity duration-500 ${
+          className={`flex-1 transition-opacity duration-300 ${
             fade ? "opacity-100" : "opacity-0"
           }`}
         >
