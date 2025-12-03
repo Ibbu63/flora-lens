@@ -1,18 +1,16 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Sun,
   Droplet,
   Leaf,
   ChevronLeft,
-  Edit,
-  Share2,
   Image,
   Grid,
   List,
-  Plus
-} from 'lucide-react';
-import type { Plant, Task, JournalEntry, Weather, ViewMode } from '../types';
-import { floraService } from '../services/floraService';
+  Plus,
+} from "lucide-react";
+import type { Plant, Task, JournalEntry, Weather, ViewMode } from "../types";
+import { floraService } from "../services/floraService";
 
 /* ---------------------------------------------------------
    PLANT DETAIL SCREEN
@@ -24,11 +22,13 @@ const PlantDetailScreen: React.FC<{
   onWater: (plantId: number) => void;
   onCompleteTask: (taskId: number) => void;
 }> = ({ plant, tasks, onClose, onWater, onCompleteTask }) => {
-  const [detailTab, setDetailTab] = useState<'overview' | 'journal' | 'reminders'>('overview');
+  const [detailTab, setDetailTab] = useState<
+    "overview" | "journal" | "reminders"
+  >("overview");
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
 
   useEffect(() => {
-    floraService.getJournal(plant.id).then(res => {
+    floraService.getJournal(plant.id).then((res) => {
       if (res.success) setJournalEntries(res.data);
     });
   }, [plant.id]);
@@ -38,9 +38,9 @@ const PlantDetailScreen: React.FC<{
       <div className="relative h-80 shadow-xl overflow-hidden">
         <div
           style={{ backgroundImage: `url(${plant.image})` }}
-          className="absolute inset-0 w-full h-full bg-cover bg-center"
-        ></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+          className="absolute inset-0 bg-cover bg-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
         <button
           onClick={onClose}
@@ -56,7 +56,7 @@ const PlantDetailScreen: React.FC<{
           <p className="text-gray-500 italic mb-2">{plant.name}</p>
 
           <div className="flex gap-2 mb-6 flex-wrap">
-            {plant.tags.map(tag => (
+            {plant.tags.map((tag) => (
               <span
                 key={tag}
                 className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-semibold"
@@ -67,12 +67,14 @@ const PlantDetailScreen: React.FC<{
           </div>
 
           <div className="flex gap-4 border-b mb-6">
-            {['overview', 'journal', 'reminders'].map(t => (
+            {["overview", "journal", "reminders"].map((t) => (
               <button
                 key={t}
                 onClick={() => setDetailTab(t as any)}
                 className={`pb-2 font-bold capitalize ${
-                  detailTab === t ? 'text-green-600 border-b-4 border-green-600' : 'text-gray-500'
+                  detailTab === t
+                    ? "text-green-600 border-b-4 border-green-600"
+                    : "text-gray-500"
                 }`}
               >
                 {t}
@@ -80,30 +82,32 @@ const PlantDetailScreen: React.FC<{
             ))}
           </div>
 
-          {detailTab === 'overview' && (
+          {detailTab === "overview" && (
             <div className="space-y-6">
               <div className="p-6 bg-green-50 rounded-3xl">
                 <h3 className="font-black text-lg mb-4">Health</h3>
 
                 <div className="grid grid-cols-3 gap-4 text-center">
-                  <div className="bg-white rounded-2xl p-4 shadow">
-                    <Sun className="mx-auto mb-2 text-yellow-500" size={28} />
-                    <div className="text-sm font-semibold">Light</div>
+                  <div className="bg-white p-4 rounded-2xl shadow">
+                    <Sun size={28} className="mx-auto mb-2 text-yellow-500" />
+                    <div className="font-semibold">Light</div>
                     <div className="text-xs text-green-600 font-bold">Good</div>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-4 shadow">
-                    <Droplet className="mx-auto mb-2 text-blue-500" size={28} />
-                    <div className="text-sm font-semibold">Soil</div>
+                  <div className="bg-white p-4 rounded-2xl shadow">
+                    <Droplet size={28} className="mx-auto mb-2 text-blue-500" />
+                    <div className="font-semibold">Soil</div>
                     <div className="text-xs text-blue-600 font-bold">
-                      {plant.soil === 'ok' ? 'Moist' : 'Dry'}
+                      {plant.soil === "ok" ? "Moist" : "Dry"}
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-4 shadow">
-                    <Leaf className="mx-auto mb-2 text-green-500" size={28} />
-                    <div className="text-sm font-semibold">Health</div>
-                    <div className="text-xs text-green-600 font-bold">Healthy</div>
+                  <div className="bg-white p-4 rounded-2xl shadow">
+                    <Leaf size={28} className="mx-auto mb-2 text-green-500" />
+                    <div className="font-semibold">Health</div>
+                    <div className="text-xs text-green-600 font-bold">
+                      Healthy
+                    </div>
                   </div>
                 </div>
               </div>
@@ -117,14 +121,17 @@ const PlantDetailScreen: React.FC<{
             </div>
           )}
 
-          {detailTab === 'journal' && (
+          {detailTab === "journal" && (
             <div className="space-y-4">
               <button className="w-full py-4 bg-green-500 text-white rounded-2xl font-bold">
                 ✍ Add Entry
               </button>
 
-              {journalEntries.map(entry => (
-                <div key={entry.id} className="bg-green-50 p-5 rounded-3xl">
+              {journalEntries.map((entry) => (
+                <div
+                  key={entry.id}
+                  className="bg-green-50 p-5 rounded-3xl shadow"
+                >
                   <div className="flex justify-between mb-3">
                     <span className="text-sm font-bold">{entry.date}</span>
                     <span className="px-3 py-1 bg-green-500 text-white rounded-full text-xs">
@@ -137,17 +144,17 @@ const PlantDetailScreen: React.FC<{
             </div>
           )}
 
-          {detailTab === 'reminders' && (
+          {detailTab === "reminders" && (
             <div className="space-y-4">
               {tasks
-                .filter(t => t.plantId === plant.id)
-                .map(task => (
+                .filter((t) => t.plantId === plant.id)
+                .map((task) => (
                   <div
                     key={task.id}
                     className="bg-blue-50 p-5 rounded-3xl flex justify-between items-center"
                   >
                     <div className="flex items-center gap-3">
-                      <Droplet size={20} className="text-blue-500" />
+                      <Droplet className="text-blue-500" size={20} />
                       <div>
                         <div className="font-bold">{task.type}</div>
                         <div className="text-sm text-gray-600">
@@ -165,7 +172,7 @@ const PlantDetailScreen: React.FC<{
                   </div>
                 ))}
 
-              {tasks.filter(t => t.plantId === plant.id).length === 0 && (
+              {tasks.filter((t) => t.plantId === plant.id).length === 0 && (
                 <p className="text-center text-gray-500 py-8">
                   No reminders for {plant.nickname}.
                 </p>
@@ -179,25 +186,27 @@ const PlantDetailScreen: React.FC<{
 };
 
 /* ---------------------------------------------------------
-   ADD / EDIT PLANT MODAL
+   ADD / EDIT PLANT MODAL (COMPLETE + FIXED)
 --------------------------------------------------------- */
 const AddPlantModal: React.FC<{
   onClose: () => void;
   onSave: (plant: Plant) => void;
   nextId: number;
-  mode?: 'add' | 'edit';
+  mode?: "add" | "edit";
   existingPlant?: Plant | null;
-}> = ({ onClose, onSave, nextId, mode = 'add', existingPlant }) => {
-  const [nickname, setNickname] = useState(existingPlant?.nickname || '');
-  const [name, setName] = useState(existingPlant?.name || '');
-  const [tags, setTags] = useState(existingPlant?.tags?.join(', ') || '');
+}> = ({ onClose, onSave, nextId, mode = "add", existingPlant }) => {
+  const [nickname, setNickname] = useState(existingPlant?.nickname || "");
+  const [name, setName] = useState(existingPlant?.name || "");
+  const [tags, setTags] = useState(existingPlant?.tags?.join(", ") || "");
   const [waterDays, setWaterDays] = useState(existingPlant?.waterDays || 3);
-  const [soil, setSoil] = useState<'ok' | 'dry'>(existingPlant?.soil || 'ok');
-  const [light, setLight] = useState<'low' | 'medium' | 'high'>(
-    existingPlant?.light || 'medium'
+  const [soil, setSoil] = useState<"ok" | "dry">(existingPlant?.soil || "ok");
+  const [light, setLight] = useState<"low" | "medium" | "high">(
+    existingPlant?.light || "medium"
   );
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState(existingPlant?.image || '');
+  const [imagePreview, setImagePreview] = useState(
+    existingPlant?.image || ""
+  );
 
   useEffect(() => {
     if (!imageFile) return;
@@ -208,36 +217,36 @@ const AddPlantModal: React.FC<{
 
   const handleSave = () => {
     if (!nickname.trim() || !name.trim()) {
-      alert('Please fill nickname and plant name');
+      alert("Please fill nickname and plant name");
       return;
     }
 
     const plant: Plant = {
-  id: nextId,
-  nickname,
-  name,
-  image: imagePreview || existingPlant?.image || '',
-  tags: tags.split(',').map(t => t.trim()).filter(Boolean),
-  waterDays,
-  soil,
-  light,
-
-  // REQUIRED BY TYPESCRIPT
-  location: existingPlant?.location || 'Unknown',
-};
-
+      id: nextId,
+      nickname,
+      name,
+      image: imagePreview || existingPlant?.image || "",
+      tags: tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+      waterDays,
+      soil,
+      light,
+      location: existingPlant?.location || "Unknown",
+    };
 
     onSave(plant);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-[120] flex items-end sm:items-center justify-center pb-24">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
 
-      <div className="relative w-full sm:w-[600px] bg-white dark:bg-gray-800 rounded-t-3xl sm:rounded-2xl p-6">
+      <div className="relative w-full max-h-[82vh] overflow-y-auto sm:w-[600px] bg-white dark:bg-gray-800 rounded-t-3xl sm:rounded-2xl p-6 shadow-2xl">
         <h3 className="text-xl font-bold mb-4">
-          {mode === 'add' ? 'Add Plant' : 'Edit Plant'}
+          {mode === "add" ? "Add Plant" : "Edit Plant"}
         </h3>
 
         <div className="space-y-3">
@@ -245,35 +254,35 @@ const AddPlantModal: React.FC<{
             className="w-full p-3 border rounded-xl bg-gray-50"
             placeholder="Nickname"
             value={nickname}
-            onChange={e => setNickname(e.target.value)}
+            onChange={(e) => setNickname(e.target.value)}
           />
 
           <input
             className="w-full p-3 border rounded-xl bg-gray-50"
             placeholder="Plant Name"
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
 
           <input
             className="w-full p-3 border rounded-xl bg-gray-50"
             placeholder="Tags (comma separated)"
             value={tags}
-            onChange={e => setTags(e.target.value)}
+            onChange={(e) => setTags(e.target.value)}
           />
 
           <input
             type="number"
             className="w-full p-3 border rounded-xl bg-gray-50"
-            placeholder="Water in days"
+            placeholder="Water after days"
             value={waterDays}
-            onChange={e => setWaterDays(parseInt(e.target.value))}
+            onChange={(e) => setWaterDays(Number(e.target.value))}
           />
 
           <select
             className="w-full p-3 border rounded-xl bg-gray-50"
             value={soil}
-            onChange={e => setSoil(e.target.value as any)}
+            onChange={(e) => setSoil(e.target.value as any)}
           >
             <option value="ok">Moist</option>
             <option value="dry">Dry</option>
@@ -282,44 +291,48 @@ const AddPlantModal: React.FC<{
           <select
             className="w-full p-3 border rounded-xl bg-gray-50"
             value={light}
-            onChange={e => setLight(e.target.value as any)}
+            onChange={(e) => setLight(e.target.value as any)}
           >
             <option value="low">Low Light</option>
             <option value="medium">Medium</option>
             <option value="high">High Light</option>
           </select>
 
-          {/* Image picker */}
           <label className="block">
             <div className="p-3 border rounded-xl flex items-center gap-3 bg-gray-50">
               <Image size={20} />
-              <span>Choose image</span>
+              <span>Select Image</span>
               <input
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={e => setImageFile(e.target.files?.[0] || null)}
+                onChange={(e) => setImageFile(e.target.files?.[0] || null)}
               />
             </div>
           </label>
 
-          {imagePreview && (
+          {imagePreview ? (
             <img
               src={imagePreview}
               className="h-36 w-full object-cover rounded-xl mt-3"
             />
-          )}
+          ) : null}
         </div>
 
-        <div className="flex justify-end gap-3 mt-6">
-          <button className="px-4 py-2 rounded-xl bg-gray-200" onClick={onClose}>
+        {/* FIXED SAVE / CANCEL BUTTONS */}
+        <div className="sticky bottom-0 bg-white dark:bg-gray-800 pt-4 pb-4 mt-4 border-t flex justify-end gap-3">
+          <button
+            className="px-4 py-2 rounded-xl bg-gray-200"
+            onClick={onClose}
+          >
             Cancel
           </button>
+
           <button
             className="px-4 py-2 rounded-xl bg-green-500 text-white font-bold"
             onClick={handleSave}
           >
-            {mode === 'add' ? 'Save' : 'Update'}
+            {mode === "add" ? "Save" : "Update"}
           </button>
         </div>
       </div>
@@ -339,13 +352,13 @@ const PlantCard: React.FC<{
   const [showMenu, setShowMenu] = useState(false);
 
   const wateringText = (d: number) =>
-    d <= 0 ? 'Water today' : d === 1 ? 'Water in 1d' : `Water in ${d}d`;
+    d <= 0 ? "Water today" : d === 1 ? "Water in 1d" : `Water in ${d}d`;
 
   return (
     <div className="relative">
       {/* Three-dot menu */}
       <button
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
           setShowMenu(!showMenu);
         }}
@@ -357,7 +370,7 @@ const PlantCard: React.FC<{
       {showMenu && (
         <div
           className="absolute top-10 right-2 z-30 bg-white rounded-xl shadow-lg border w-32 p-2"
-          onClick={e => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           <button
             className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100"
@@ -368,6 +381,7 @@ const PlantCard: React.FC<{
           >
             ✏ Edit
           </button>
+
           <button
             className="w-full text-left px-3 py-2 rounded-lg text-red-600 hover:bg-red-100"
             onClick={() => {
@@ -380,19 +394,22 @@ const PlantCard: React.FC<{
         </div>
       )}
 
+      {/* Plant Card */}
       <div
         onClick={onClick}
-        className="group relative aspect-[3/4] rounded-3xl overflow-hidden shadow-lg"
+        className="group relative aspect-[3/4] rounded-3xl shadow-lg overflow-hidden cursor-pointer"
       >
         <div
           style={{ backgroundImage: `url(${plant.image})` }}
           className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform"
-        ></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
 
         <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
           <h3 className="font-bold text-xl truncate">{plant.nickname}</h3>
           <p className="text-sm opacity-80 italic">{plant.name}</p>
+
           <div className="flex items-center gap-2 mt-2 text-sm font-medium">
             <Droplet size={14} />
             <span>{wateringText(plant.waterDays)}</span>
@@ -415,18 +432,20 @@ const Garden: React.FC<{
 }> = ({ plants, tasks, weather, onWater, onCompleteTask }) => {
   const [localPlants, setLocalPlants] = useState<Plant[]>(plants);
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [filterTag, setFilterTag] = useState('All');
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [filterTag, setFilterTag] = useState("All");
   const [showAddModal, setShowAddModal] = useState(false);
   const [editPlant, setEditPlant] = useState<Plant | null>(null);
 
-  const nextId = React.useMemo(() => {
-    return Math.max(0, ...localPlants.map(p => p.id)) + 1;
-  }, [localPlants]);
+  const nextId = React.useMemo(
+    () => Math.max(0, ...localPlants.map((p) => p.id)) + 1,
+    [localPlants]
+  );
 
-  const filtered = filterTag === 'All'
-    ? localPlants
-    : localPlants.filter(p => p.tags.includes(filterTag));
+  const filtered =
+    filterTag === "All"
+      ? localPlants
+      : localPlants.filter((p) => p.tags.includes(filterTag));
 
   return (
     <div className="pb-28 pt-16">
@@ -439,6 +458,7 @@ const Garden: React.FC<{
             <div className="bg-white/20 px-3 py-1 rounded-full flex items-center gap-2">
               <Sun size={16} /> {weather.temp}°C
             </div>
+
             <div className="bg-white/20 px-3 py-1 rounded-full flex items-center gap-2">
               <Droplet size={16} /> {weather.humidity}%
             </div>
@@ -449,40 +469,43 @@ const Garden: React.FC<{
       {/* Filter */}
       <div className="px-4 mt-4 flex items-center justify-between">
         <div className="flex gap-2 overflow-x-auto">
-          {['All', 'Low Light', 'Indoor', 'Trailing', 'Low Maintenance'].map(tag => (
-            <button
-              key={tag}
-              className={`px-4 py-2 rounded-full text-sm font-bold ${
-                filterTag === tag
-                  ? 'bg-green-500 text-white'
-                  : 'bg-white text-gray-700'
-              }`}
-              onClick={() => setFilterTag(tag)}
-            >
-              {tag}
-            </button>
-          ))}
+          {["All", "Low Light", "Indoor", "Trailing", "Low Maintenance"].map(
+            (tag) => (
+              <button
+                key={tag}
+                className={`px-4 py-2 rounded-full text-sm font-bold ${
+                  filterTag === tag
+                    ? "bg-green-500 text-white"
+                    : "bg-white text-gray-700"
+                }`}
+                onClick={() => setFilterTag(tag)}
+              >
+                {tag}
+              </button>
+            )
+          )}
         </div>
 
+        {/* View Mode Buttons */}
         <div className="flex gap-2">
           <button
             className={`p-3 rounded-xl ${
-              viewMode === 'grid'
-                ? 'bg-green-500 text-white'
-                : 'bg-white text-gray-600'
+              viewMode === "grid"
+                ? "bg-green-500 text-white"
+                : "bg-white text-gray-600"
             }`}
-            onClick={() => setViewMode('grid')}
+            onClick={() => setViewMode("grid")}
           >
             <Grid size={18} />
           </button>
 
           <button
             className={`p-3 rounded-xl ${
-              viewMode === 'list'
-                ? 'bg-green-500 text-white'
-                : 'bg-white text-gray-600'
+              viewMode === "list"
+                ? "bg-green-500 text-white"
+                : "bg-white text-gray-600"
             }`}
-            onClick={() => setViewMode('list')}
+            onClick={() => setViewMode("list")}
           >
             <List size={18} />
           </button>
@@ -494,8 +517,14 @@ const Garden: React.FC<{
         {filtered.length === 0 ? (
           <p className="text-center text-gray-500 mt-10">No plants found.</p>
         ) : (
-          <div className={viewMode === 'grid' ? 'grid grid-cols-2 gap-4' : 'space-y-4'}>
-            {filtered.map(plant => (
+          <div
+            className={
+              viewMode === "grid"
+                ? "grid grid-cols-2 gap-4"
+                : "space-y-4"
+            }
+          >
+            {filtered.map((plant) => (
               <PlantCard
                 key={plant.id}
                 plant={plant}
@@ -505,8 +534,10 @@ const Garden: React.FC<{
                   setShowAddModal(true);
                 }}
                 onDelete={() => {
-                  if (confirm('Delete this plant?')) {
-                    setLocalPlants(prev => prev.filter(p => p.id !== plant.id));
+                  if (confirm("Delete this plant?")) {
+                    setLocalPlants((prev) =>
+                      prev.filter((p) => p.id !== plant.id)
+                    );
                   }
                 }}
               />
@@ -515,7 +546,7 @@ const Garden: React.FC<{
         )}
       </div>
 
-      {/* Add Button */}
+      {/* Floating Add Button */}
       <button
         onClick={() => {
           setEditPlant(null);
@@ -533,22 +564,22 @@ const Garden: React.FC<{
             setShowAddModal(false);
             setEditPlant(null);
           }}
-          onSave={p => {
+          onSave={(p) => {
             if (editPlant) {
-              setLocalPlants(prev =>
-                prev.map(pl => (pl.id === editPlant.id ? p : pl))
+              setLocalPlants((prev) =>
+                prev.map((pl) => (pl.id === editPlant.id ? p : pl))
               );
             } else {
-              setLocalPlants(prev => [...prev, p]);
+              setLocalPlants((prev) => [...prev, p]);
             }
           }}
           nextId={editPlant ? editPlant.id : nextId}
-          mode={editPlant ? 'edit' : 'add'}
+          mode={editPlant ? "edit" : "add"}
           existingPlant={editPlant}
         />
       )}
 
-      {/* Detail screen */}
+      {/* Details Screen */}
       {selectedPlant && (
         <PlantDetailScreen
           plant={selectedPlant}
