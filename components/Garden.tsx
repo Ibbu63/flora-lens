@@ -213,15 +213,19 @@ const AddPlantModal: React.FC<{
     }
 
     const plant: Plant = {
-      id: nextId,
-      nickname,
-      name,
-      image: imagePreview || existingPlant?.image || '',
-      tags: tags.split(',').map(t => t.trim()).filter(Boolean),
-      waterDays,
-      soil,
-      light,
-    };
+  id: nextId,
+  nickname,
+  name,
+  image: imagePreview || existingPlant?.image || '',
+  tags: tags.split(',').map(t => t.trim()).filter(Boolean),
+  waterDays,
+  soil,
+  light,
+
+  // REQUIRED BY TYPESCRIPT
+  location: existingPlant?.location || 'Unknown',
+};
+
 
     onSave(plant);
     onClose();
