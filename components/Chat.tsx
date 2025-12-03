@@ -20,20 +20,23 @@ const Chat: React.FC = () => {
   const [activeQuickQuestion, setActiveQuickQuestion] = useState<string | null>(null);
   const [typingText, setTypingText] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToBottom = () =>
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 
-  useEffect(scrollToBottom, [messages, typingText]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, typingText]);
 
   const typeMessage = (fullText: string) => {
     return new Promise<void>((resolve) => {
       setTypingText("");
       let index = 0;
       const interval = setInterval(() => {
-        setTypingText((prev) => prev + fullText[index]);
+        setTypingText((prev) => prev + (fullText[index] ?? ""));
         index++;
-        if (index === fullText.length) {
+        if (index >= fullText.length) {
           clearInterval(interval);
           resolve();
         }
@@ -59,9 +62,9 @@ const Chat: React.FC = () => {
         ...prev,
         { type: "bot", text: "⚠️ Unable to get response." },
       ]);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleQuickQuestion = async (q: string) => {
@@ -82,9 +85,9 @@ const Chat: React.FC = () => {
         ...prev,
         { type: "bot", text: "⚠️ Unable to get response." },
       ]);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleNewChat = () => {
@@ -111,74 +114,80 @@ const Chat: React.FC = () => {
           </button>
         </div>
 
-        {/* CHAT MESSAGES SCROLL AREA */}
-        <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col gap-4 scroll-smooth">
-          {messages.map((msg, i) => (
-            <div key={i} className={`flex ${msg.type === "user" ? "justify-end" : "justify-start"} animate-fade-in`}>
-              <div
-                className={`max-w-[85%] rounded-3xl px-5 py-3 text-sm leading-relaxed shadow-md break-words ${
-                  msg.type === "user"
-                    ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white"
-                    : "bg-white text-gray-800 border border-green-100 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
-                }`}
-              >
-                {msg.text}
+        {/* CHAT BODY */}
+        <div
+          ref={scrollContainerRef}
+          className="flex-1 relative w-full px-4 py-6 flex flex-col gap-4 overflow-y-auto scroll-smooth"
+        >
+
+          {/* MESSAGES */}
+          <div className="flex-1 flex flex-col gap-4 mb-28"> {/* mb-28 leaves space for input */}
+            {messages.map((msg, i) => (
+              <div key={i} className={`flex ${msg.type === "user" ? "justify-end" : "justify-start"} animate-fade-in`}>
+                <div
+                  className={`max-w-[85%] rounded-3xl px-5 py-3 text-sm leading-relaxed shadow-md break-words ${
+                    msg.type === "user"
+                      ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white"
+                      : "bg-white text-gray-800 border border-green-100 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+                  }`}
+                >
+                  {msg.text}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {isLoading && typingText && (
-            <div className="flex justify-start animate-fade-in">
-              <div className="max-w-[85%] bg-white dark:bg-gray-700 border border-green-100 dark:border-gray-600 rounded-3xl px-5 py-3 shadow-md break-words">
-                {typingText}
-                <span className="animate-pulse">|</span>
-              </div>
-            </div>
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* INPUT AREA */}
-        <div className="w-full bg-white dark:bg-gray-800 border-t border-green-100 dark:border-gray-700 px-4 py-3 flex-shrink-0">
-          <div className="flex flex-col gap-2">
-
-            {!activeQuickQuestion && (
-              <div className="flex flex-wrap gap-2 justify-center">
-                {quickQuestions.map((q, i) => (
-                  <button
-                    key={i}
-                    disabled={isLoading}
-                    onClick={() => handleQuickQuestion(q)}
-                    className="px-4 py-2 rounded-full text-xs font-semibold bg-green-100 text-green-800 hover:bg-green-200 hover:shadow-md transition-transform hover:scale-105 dark:bg-green-900/50 dark:text-green-300"
-                  >
-                    {q}
-                  </button>
-                ))}
+            {isLoading && typingText && (
+              <div className="flex justify-start animate-fade-in">
+                <div className="max-w-[85%] bg-white dark:bg-gray-700 border border-green-100 dark:border-gray-600 rounded-3xl px-5 py-3 shadow-md break-words">
+                  {typingText}
+                  <span className="animate-pulse">|</span>
+                </div>
               </div>
             )}
 
-            <div className="flex items-center gap-3">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder="🌱 Ask about your plants..."
-                className="flex-1 px-4 py-2 rounded-2xl border border-green-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 text-sm bg-white dark:bg-gray-700 shadow-sm placeholder-gray-500 dark:placeholder-gray-400"
-              />
-              <button
-                onClick={handleSend}
-                disabled={isLoading}
-                className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-2xl hover:shadow-lg hover:scale-110 active:scale-95 transition-transform disabled:opacity-50"
-              >
-                {isLoading ? <Loader className="animate-spin" size={18} /> : <Send size={18} />}
-              </button>
-            </div>
+            <div ref={messagesEndRef} />
+          </div>
 
+          {/* INPUT BOX - FIXED */}
+          <div className="absolute bottom-4 left-0 w-full px-4 pointer-events-none">
+            <div className="pointer-events-auto bg-white dark:bg-gray-800 border-t border-green-100 dark:border-gray-700 rounded-2xl px-4 py-3 shadow-md flex flex-col gap-2">
+              
+              {!activeQuickQuestion && (
+                <div className="flex flex-wrap gap-2 justify-center mb-2">
+                  {quickQuestions.map((q, i) => (
+                    <button
+                      key={i}
+                      disabled={isLoading}
+                      onClick={() => handleQuickQuestion(q)}
+                      className="px-4 py-2 rounded-full text-xs font-semibold bg-green-100 text-green-800 hover:bg-green-200 hover:shadow-md transition-transform hover:scale-105 dark:bg-green-900/50 dark:text-green-300"
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex items-center gap-3">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                  placeholder="🌱 Ask about your plants..."
+                  className="flex-1 px-4 py-2 rounded-2xl border border-green-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 text-sm bg-white dark:bg-gray-700 shadow-sm"
+                />
+                <button
+                  onClick={handleSend}
+                  disabled={isLoading}
+                  className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-2xl hover:shadow-lg transition-transform hover:scale-110 active:scale-95 disabled:opacity-50"
+                >
+                  {isLoading ? <Loader className="animate-spin" size={18} /> : <Send size={18} />}
+                </button>
+              </div>
+
+            </div>
           </div>
         </div>
-
       </div>
     </div>
   );
