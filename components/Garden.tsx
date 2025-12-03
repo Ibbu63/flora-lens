@@ -269,12 +269,17 @@ const AddPlantModal: React.FC<{
             onChange={(e) => setName(e.target.value)}
           />
 
-          <input
-            className="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 dark:text-white dark:placeholder-gray-300"
-            placeholder="Tags (comma separated)"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-          />
+          <select
+  className="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 dark:text-white"
+  value={tags}
+  onChange={(e) => setTags(e.target.value)}
+>
+  <option value="">Select Category</option>
+  <option value="Indoor">Indoor</option>
+  <option value="Outdoor">Outdoor</option>
+  <option value="Both">Both</option>
+</select>
+
 
           <input
             type="number"
