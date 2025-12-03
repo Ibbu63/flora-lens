@@ -336,7 +336,6 @@ const AddPlantModal: React.FC<{
           </button>
         </div>
       </div>
-    </div>
   );
 };
 
