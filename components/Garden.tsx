@@ -244,7 +244,7 @@ const AddPlantModal: React.FC<{
     <div className="fixed inset-0 z-[120] flex items-end sm:items-center justify-center pb-24">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
 
-      <div className="relative w-full max-h-[82vh] overflow-y-auto sm:w-[600px] bg-white dark:bg-gray-800 rounded-t-3xl sm:rounded-2xl p-6 shadow-2xl">
+      <div className="relative w-full max-h-[82vh] overflow-y-auto sm:w-[600px] bg-white bg-gray-800 rounded-t-3xl sm:rounded-2xl p-6 shadow-2xl">
         <h3 className="text-xl font-bold mb-4">
           {mode === "add" ? "Add Plant" : "Edit Plant"}
         </h3>
