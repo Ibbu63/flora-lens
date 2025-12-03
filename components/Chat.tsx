@@ -113,9 +113,15 @@ const Chat: React.FC = () => {
         <div className="flex-1 w-full overflow-hidden relative">
 
           {/* Scrollable messages */}
-          <div className="h-full overflow-y-auto px-4 py-6 pb-32">
+          <div className="h-full overflow-y-auto px-4 py-6 pb-40">
+
             {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.type === "user" ? "justify-end" : "justify-start"} animate-fade-in`}>
+              <div
+                key={i}
+                className={`flex mb-3 ${
+                  msg.type === "user" ? "justify-end" : "justify-start"
+                } animate-fade-in`}
+              >
                 <div
                   className={`max-w-[85%] rounded-3xl px-5 py-3 text-sm leading-relaxed shadow-md break-words ${
                     msg.type === "user"
@@ -129,8 +135,8 @@ const Chat: React.FC = () => {
             ))}
 
             {isLoading && typingText && (
-              <div className="flex justify-start animate-fade-in">
-                <div className="max-w-[85%] bg-white dark:bg-gray-700 border border-green-100 dark:border-gray-600 rounded-3xl px-5 py-3 shadow-md break-words">
+              <div className="flex justify-start mb-3 animate-fade-in">
+                <div className="max-w-[85%] rounded-3xl px-5 py-3 bg-white dark:bg-gray-700 border border-green-100 dark:border-gray-600 shadow-md break-words">
                   {typingText}
                   <span className="animate-pulse">|</span>
                 </div>
@@ -140,26 +146,42 @@ const Chat: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* FIXED INPUT BOX */}
+          {/* FIXED INPUT BOX + QUICK QUESTIONS */}
           <div className="absolute bottom-4 left-0 w-full px-4">
-            <div className="bg-white dark:bg-gray-800 border border-green-200 dark:border-gray-700 rounded-2xl px-4 py-3 shadow-lg flex items-center gap-3">
+            <div className="bg-white dark:bg-gray-800 border border-green-200 dark:border-gray-700 rounded-2xl px-4 py-4 shadow-lg flex flex-col gap-3">
 
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder="🌱 Ask about your plants..."
-                className="flex-1 px-4 py-2 rounded-2xl border border-green-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-700 text-sm"
-              />
+              {!activeQuickQuestion && (
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {quickQuestions.map((q, i) => (
+                    <button
+                      key={i}
+                      disabled={isLoading}
+                      onClick={() => handleQuickQuestion(q)}
+                      className="px-4 py-2 rounded-full text-xs font-semibold bg-green-100 text-green-800 hover:bg-green-200 hover:shadow-md transition-transform hover:scale-105 dark:bg-green-900/50 dark:text-green-300"
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              )}
 
-              <button
-                onClick={handleSend}
-                disabled={isLoading}
-                className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-2xl hover:shadow-lg transition-transform hover:scale-110 active:scale-95 disabled:opacity-50"
-              >
-                {isLoading ? <Loader className="animate-spin" size={18} /> : <Send size={18} />}
-              </button>
+              <div className="flex items-center gap-3">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                  placeholder="🌱 Ask about your plants..."
+                  className="flex-1 px-4 py-2 rounded-2xl border border-green-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400 text-sm"
+                />
+                <button
+                  onClick={handleSend}
+                  disabled={isLoading}
+                  className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-2xl hover:shadow-lg hover:scale-110 active:scale-95 transition-transform disabled:opacity-50"
+                >
+                  {isLoading ? <Loader className="animate-spin" size={18} /> : <Send size={18} />}
+                </button>
+              </div>
 
             </div>
           </div>
