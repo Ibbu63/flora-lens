@@ -113,14 +113,12 @@ const Chat: React.FC = () => {
         <div className="flex-1 w-full overflow-hidden relative">
 
           {/* Scrollable messages */}
-          <div className="h-full overflow-y-auto px-4 py-6 pb-40">
-
+          {/* pb-44 leaves extra room for quick questions + input so nothing is clipped */}
+          <div className="h-full overflow-y-auto px-4 py-6 pb-44">
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex mb-3 ${
-                  msg.type === "user" ? "justify-end" : "justify-start"
-                } animate-fade-in`}
+                className={`flex mb-3 ${msg.type === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
               >
                 <div
                   className={`max-w-[85%] rounded-3xl px-5 py-3 text-sm leading-relaxed shadow-md break-words ${
@@ -147,9 +145,11 @@ const Chat: React.FC = () => {
           </div>
 
           {/* FIXED INPUT BOX + QUICK QUESTIONS */}
-          <div className="absolute bottom-4 left-0 w-full px-4">
-            <div className="bg-white dark:bg-gray-800 border border-green-200 dark:border-gray-700 rounded-2xl px-4 py-4 shadow-lg flex flex-col gap-3">
+          {/* z-40 ensures this sits above everything (nav, messages) */}
+          <div className="absolute bottom-4 left-0 w-full px-4 z-40 pointer-events-none">
+            <div className="pointer-events-auto bg-white dark:bg-gray-800 border border-green-200 dark:border-gray-700 rounded-2xl px-4 py-4 shadow-lg flex flex-col gap-3">
 
+              {/* Quick Questions */}
               {!activeQuickQuestion && (
                 <div className="flex flex-wrap gap-2 justify-center">
                   {quickQuestions.map((q, i) => (
@@ -165,6 +165,7 @@ const Chat: React.FC = () => {
                 </div>
               )}
 
+              {/* Input */}
               <div className="flex items-center gap-3">
                 <input
                   type="text"
