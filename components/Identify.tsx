@@ -114,9 +114,17 @@ const Identify: React.FC = () => {
     <div className="pb-28 pt-20 px-4">
 
       {/* Page Title */}
-      <h1 className="text-4xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-500 drop-shadow">
-        Identify Disease
-      </h1>
+      <h1 className="text-4xl font-black mb-6 
+  flex items-center gap-2
+  bg-gradient-to-r from-green-600 via-emerald-500 to-green-700 
+  bg-clip-text text-transparent 
+  drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]
+  tracking-wide">
+  
+  <span className="text-5xl">🌿</span>
+  <span>Identify Disease</span>
+</h1>
+
 
       {/* PREVIEW CARD */}
       <div className="
