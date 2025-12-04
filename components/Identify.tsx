@@ -122,11 +122,13 @@ const Identify: React.FC = () => {
 
       {/* PREVIEW CARD */}
       <div className="
-  relative rounded-3xl aspect-square p-1
-  bg-gradient-to-br from-green-500 via-emerald-400 to-teal-400 
-  shadow-xl overflow-hidden mb-8
+  relative rounded-3xl aspect-square 
+  border-[3px] border-emerald-500 
+  shadow-[0_0_20px_rgba(16,185,129,0.5)]
+  bg-gradient-to-br from-green-100 to-emerald-100 
+  dark:from-green-900/40 dark:to-emerald-900/40
+  overflow-hidden flex items-center justify-center mb-8
 ">
-  <div className="rounded-3xl w-full h-full bg-white dark:bg-gray-900 overflow-hidden flex items-center justify-center">
 
         {error && <p className="text-red-600 text-center font-semibold px-3">{error}</p>}
 
