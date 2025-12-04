@@ -54,7 +54,7 @@ const Chat: React.FC = () => {
           clearInterval(interval);
           resolve();
         }
-      }, 85); // Adjust speed here
+      }, 25); // Adjust speed here
     });
   };
 
