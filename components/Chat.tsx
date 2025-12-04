@@ -46,24 +46,28 @@ const Chat: React.FC = () => {
   };
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  if (!input.trim() || isLoading) return;
 
-    const userMessage = { type: "user", text: input };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setIsLoading(true);
+  // ⬇️ THIS LINE MAKES QUICK QUESTIONS HIDE WHEN USER TYPES
+  setActiveQuickQuestion("typed");
 
-    try {
-      const aiResponseText = await getAiChatResponse(userMessage.text);
-      await typeMessage(aiResponseText);
-      setMessages((prev) => [...prev, { type: "bot", text: aiResponseText }]);
-      setTypingText("");
-    } catch {
-      setMessages((prev) => [...prev, { type: "bot", text: "⚠️ Unable to get response." }]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const userMessage = { type: "user", text: input };
+  setMessages((prev) => [...prev, userMessage]);
+  setInput("");
+  setIsLoading(true);
+
+  try {
+    const aiResponseText = await getAiChatResponse(userMessage.text);
+    await typeMessage(aiResponseText);
+    setMessages((prev) => [...prev, { type: "bot", text: aiResponseText }]);
+    setTypingText("");
+  } catch {
+    setMessages((prev) => [...prev, { type: "bot", text: "⚠️ Unable to get response." }]);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const handleQuickQuestion = async (q: string) => {
     if (isLoading) return;
