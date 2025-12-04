@@ -114,13 +114,9 @@ const Identify: React.FC = () => {
     <div className="pb-28 pt-20 px-4">
 
       {/* Page Title */}
-      <h1 className="text-4xl font-extrabold mb-4 relative w-fit 
-  bg-gradient-to-r from-green-700 to-emerald-500 bg-clip-text text-transparent">
-  
+      <h1 className="text-4xl font-extrabold mb-6 text-green-700 dark:text-green-400 flex items-center gap-3">
+  <span className="px-3 py-1 bg-green-100 dark:bg-green-800 rounded-xl text-2xl shadow-md">🌱</span>
   Identify Disease
-
-  <span className="absolute left-0 -bottom-2 w-full h-1 
-    bg-gradient-to-r from-green-600 to-emerald-500 rounded-full"></span>
 </h1>
 
 
