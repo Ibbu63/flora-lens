@@ -114,7 +114,7 @@ const Identify: React.FC = () => {
     <div className="pb-28 pt-20 px-4">
 
       {/* Page Title */}
-      <h1 className="text-4xl font-extrabold mb-6 text-green-700 dark:text-green-400 flex items-center gap-3">
+      <h1 className="text-4xl font-extrabold mb-6 text-green-700 dark:text-green-400 flex items-center gap-3" >
   <span className="px-3 py-1 bg-green-100 dark:bg-green-800 rounded-xl text-2xl shadow-md">🌱</span>
   Identify Disease
 </h1>
@@ -122,11 +122,14 @@ const Identify: React.FC = () => {
 
       {/* PREVIEW CARD */}
       <div className="
-        relative rounded-3xl aspect-square shadow-xl border border-green-300/40
-        bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100
-        dark:from-green-900/40 dark:via-emerald-900/40 dark:to-teal-900/40
-        overflow-hidden flex items-center justify-center mb-8
-      ">
+  relative rounded-3xl aspect-square
+  shadow-xl 
+  bg-gradient-to-br from-green-50 via-emerald-100 to-teal-100
+  border-[3px] border-white/60 dark:border-white/10
+  backdrop-blur-md
+  overflow-hidden flex items-center justify-center mb-8
+">
+
         {error && <p className="text-red-600 text-center font-semibold px-3">{error}</p>}
 
         {/* Camera feed */}
