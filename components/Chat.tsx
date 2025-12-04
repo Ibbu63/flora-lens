@@ -16,6 +16,12 @@ const Chat: React.FC = () => {
     { type: "bot", text: "🌿 Hi! I’m your Flora Companion. Ask me anything about plant care!" },
   ]);
 
+    // Set browser tab title
+  useEffect(() => {
+    document.title = "Flora AI";
+  }, []);
+
+
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [activeQuickQuestion, setActiveQuickQuestion] = useState<string | null>(null);
@@ -23,51 +29,57 @@ const Chat: React.FC = () => {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () =>
+  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages, typingText]);
 
+  // ⭐ Word-by-word typing animation (smooth, no spelling glitches)
   const typeMessage = (fullText: string) => {
     return new Promise<void>((resolve) => {
       setTypingText("");
+      const words = fullText.split(" ");
       let index = 0;
+
       const interval = setInterval(() => {
-        setTypingText((prev) => prev + (fullText[index] ?? ""));
+        setTypingText((prev) =>
+          index === 0 ? words[index] : prev + " " + words[index]
+        );
         index++;
-        if (index >= fullText.length) {
+
+        if (index >= words.length) {
           clearInterval(interval);
           resolve();
         }
-      }, 25);
+      }, 85); // Adjust speed here
     });
   };
 
   const handleSend = async () => {
-  if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading) return;
 
-  // ⬇️ THIS LINE MAKES QUICK QUESTIONS HIDE WHEN USER TYPES
-  setActiveQuickQuestion("typed");
+    // ⬇️ Hide quick questions if user types manually
+    setActiveQuickQuestion("typed");
 
-  const userMessage = { type: "user", text: input };
-  setMessages((prev) => [...prev, userMessage]);
-  setInput("");
-  setIsLoading(true);
+    const userMessage = { type: "user", text: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
 
-  try {
-    const aiResponseText = await getAiChatResponse(userMessage.text);
-    await typeMessage(aiResponseText);
-    setMessages((prev) => [...prev, { type: "bot", text: aiResponseText }]);
-    setTypingText("");
-  } catch {
-    setMessages((prev) => [...prev, { type: "bot", text: "⚠️ Unable to get response." }]);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+    try {
+      const aiResponseText = await getAiChatResponse(userMessage.text);
+      await typeMessage(aiResponseText);
+      setMessages((prev) => [...prev, { type: "bot", text: aiResponseText }]);
+      setTypingText("");
+    } catch {
+      setMessages((prev) => [...prev, { type: "bot", text: "⚠️ Unable to get response." }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleQuickQuestion = async (q: string) => {
     if (isLoading) return;
@@ -114,21 +126,20 @@ const Chat: React.FC = () => {
         </div>
 
         {/* CHAT BODY */}
+        
         <div className="flex-1 w-full overflow-hidden relative">
-
           {/* Scrollable messages */}
-          {/* pb-44 leaves extra room for quick questions + input so nothing is clipped */}
           <div className="h-full overflow-y-auto px-4 py-6 pb-44">
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex mb-3 ${msg.type === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
+                className={`flex mb-3 ${msg.type === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[85%] rounded-3xl px-5 py-3 text-sm leading-relaxed shadow-md break-words ${
+                  className={`max-w-[85%] rounded-3xl px-5 py-3 text-base leading-relaxed shadow-md break-words ${
                     msg.type === "user"
                       ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white"
-                      : "bg-white text-gray-800 border border-green-100 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+                      : "bg-white text-gray-900 border border-green-100 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
                   }`}
                 >
                   {msg.text}
@@ -136,9 +147,11 @@ const Chat: React.FC = () => {
               </div>
             ))}
 
+            {/* Typing bubble */}
             {isLoading && typingText && (
-              <div className="flex justify-start mb-3 animate-fade-in">
-                <div className="max-w-[85%] rounded-3xl px-5 py-3 bg-white dark:bg-gray-700 border border-green-100 dark:border-gray-600 shadow-md break-words">
+              <div className="flex justify-start mb-3">
+                <div className="max-w-[85%] rounded-3xl px-5 py-3 text-base leading-relaxed shadow-md break-words 
+                  bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-green-100 dark:border-gray-600">
                   {typingText}
                   <span className="animate-pulse">|</span>
                 </div>
@@ -148,12 +161,11 @@ const Chat: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* FIXED INPUT BOX + QUICK QUESTIONS */}
-          {/* z-40 ensures this sits above everything (nav, messages) */}
+          {/* FIXED INPUT + QUICK QUESTIONS */}
           <div className="absolute bottom-4 left-0 w-full px-4 z-40 pointer-events-none">
             <div className="pointer-events-auto bg-white dark:bg-gray-800 border border-green-200 dark:border-gray-700 rounded-2xl px-4 py-4 shadow-lg flex flex-col gap-3">
 
-              {/* Quick Questions */}
+              {/* Quick Questions (hide after first typed message) */}
               {!activeQuickQuestion && (
                 <div className="flex flex-wrap gap-2 justify-center">
                   {quickQuestions.map((q, i) => (
@@ -177,7 +189,7 @@ const Chat: React.FC = () => {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   placeholder="🌱 Ask about your plants..."
-                  className="flex-1 px-4 py-2 rounded-2xl border border-green-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400 text-sm"
+                  className="flex-1 px-4 py-2 rounded-2xl border border-green-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400 text-base"
                 />
                 <button
                   onClick={handleSend}
