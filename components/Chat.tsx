@@ -168,18 +168,21 @@ const Chat: React.FC = () => {
 
               {/* 🌿 QUICK QUESTIONS (show only at start) */}
               {showQuick && (
-                <div className="flex overflow-x-auto gap-2 pb-1">
-                  {quickQuestions.map((q, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handleQuick(q)}
-                      className="whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold bg-green-100 text-green-800 hover:bg-green-200 transition-transform hover:scale-105 dark:bg-green-900/40 dark:text-green-300"
-                    >
-                      {q}
-                    </button>
-                  ))}
-                </div>
-              )}
+  <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-1">
+    {quickQuestions.map((q, i) => (
+      <button
+        key={i}
+        onClick={() => handleQuick(q)}
+        className="w-full text-left px-4 py-3 rounded-xl text-sm font-semibold 
+                   bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900/40 
+                   dark:text-green-300 transition-all hover:scale-[1.01] shadow-sm"
+      >
+        {q}
+      </button>
+    ))}
+  </div>
+)}
+
 
               {/* BIG input box */}
               <div className="flex items-center gap-3">
