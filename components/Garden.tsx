@@ -274,7 +274,7 @@ const AddPlantModal: React.FC<{
   value={tags}
   onChange={(e) => setTags(e.target.value)}
 >
-  <option value="">Select Category</option>
+  <option value="" disabled selected>Plant Habitat</option>
   <option value="Indoor">Indoor</option>
   <option value="Outdoor">Outdoor</option>
   <option value="Both">Both</option>
