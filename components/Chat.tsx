@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Send, Loader } from "lucide-react";
+import { Send, Loader, Leaf } from "lucide-react";
 import type { ChatMessage } from "../types";
 import { getAiChatResponse } from "../services/geminiService";
 
@@ -121,11 +121,12 @@ const Chat: React.FC = () => {
           </div>
 
           <button
-            onClick={handleNewChat}
-            className="p-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600 transition"
-          >
-            ✚
-          </button>
+  onClick={handleNewChat}
+  className="p-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition flex items-center justify-center"
+>
+  <Leaf size={20} />
+</button>
+
         </div>
 
         {/* CHAT BODY */}
