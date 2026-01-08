@@ -39,28 +39,7 @@ const getMockResponse = (message: string): string => {
     return "I can help with plant care! Ask me about watering, lighting, pests, or leaf issues.";
 };
 
-const isPlantRelated = (message: string): boolean => {
-    const plantKeywords = [
-        "plant", "leaf", "leaves", "watering", "water",
-        "soil", "fertilizer", "sunlight", "light",
-        "root", "stem", "flower", "garden",
-        "pest", "fungus", "yellow", "brown",
-        "growth", "pruning", "repot", "pot"
-    ];
-
-    const lowerMsg = message.toLowerCase();
-    return plantKeywords.some(keyword => lowerMsg.includes(keyword));
-};
-
-
 export const getAiChatResponse = async (message: string): Promise<string> => {
-
-    // 🚫 Non-plant question handler
-    if (!isPlantRelated(message)) {
-        return "❌ This question is not related to plants. I can only help with plant care.";
-    }
-
-    // 🟡 If API key is missing → mock response
     if (!ai) {
         await new Promise(resolve => setTimeout(resolve, 500));
         return getMockResponse(message);
